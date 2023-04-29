@@ -120,4 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: -1938565891806197878}
   player: {fileID: 8297371708520893763}
+  playerRB: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   movementSpeed: 0.001
+  jumpHeight: 100

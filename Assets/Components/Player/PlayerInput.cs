@@ -27,13 +27,20 @@ public class PlayerInput : MonoBehaviour {
     void Update() {
         HandleAnimator();
 
+        
+    }
+
+    void FixedUpdate() {
         if (Input.GetKey(KeyCode.D)) {
-            transform.position += Vector3.right * movementSpeed * Time.deltaTime;
+            playerRB.velocity = new Vector2(playerRB.position.x + movementSpeed * Time.deltaTime, playerRB.velocity.y);
+
+            //transform.position += Vector3.right * movementSpeed * Time.deltaTime;
             faceLeft = false;
             isMoving = true;
 
         } else if (Input.GetKey(KeyCode.A)) {
-            transform.position += Vector3.right * -movementSpeed * Time.deltaTime;
+            //playerRB.MovePosition(new Vector2(playerRB.position.x - movementSpeed * Time.deltaTime, playerRB.position.y));
+            playerRB.velocity = new Vector2(playerRB.position.x - movementSpeed * Time.deltaTime, playerRB.velocity.y);
             faceLeft = true;
             isMoving = true;
         } else {
@@ -48,8 +55,6 @@ public class PlayerInput : MonoBehaviour {
         }
     }
 
-
-
     private void OnTriggerEnter2D(Collider2D collision) {
         isJumping = false;
     }
@@ -60,6 +65,7 @@ public class PlayerInput : MonoBehaviour {
         animator.SetBool("faceLeft", moveX <= 0);
         animator.SetFloat("moveX", moveX);
         animator.SetBool("isMoving", isMoving);
+        animator.SetBool("isJumping", isJumping);
         spriteRenderer.flipX = !faceLeft;
 
     }
