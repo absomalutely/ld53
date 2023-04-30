@@ -18,11 +18,15 @@ public class PlayerInput : MonoBehaviour {
 
     //bool allowJump = true;
     bool isJumping = false;
+    bool canJump = true;
     bool isMoving = true;
     float moveX;
 
     float moveHorizontal = 0f;
     float moveVertical = 0f;
+
+    float jumpDebounceLimit = 0.33f;
+    float jumpDebounceCounter = 0f;
 
     void Start() {
         playerRB = player.GetComponent<Rigidbody2D>();
@@ -31,6 +35,7 @@ public class PlayerInput : MonoBehaviour {
     }
 
     void Update() {
+        JumpDebounceTick();
         HandleAnimator();
 
         moveHorizontal = Input.GetAxisRaw("Horizontal");
@@ -47,10 +52,11 @@ public class PlayerInput : MonoBehaviour {
         if (moveHorizontal > 0.1f || moveHorizontal < -0.1f) {
             playerRB.AddForce(new Vector2(moveHorizontal * movementSpeed, 0f), ForceMode2D.Impulse);
         }
-        if (!isJumping) {
+        if (!isJumping && canJump) {
             if (moveVertical > 0.1f || moveVertical < -0.1f) {
                 playerRB.AddForce(new Vector2(0f, moveVertical * jumpHeight), ForceMode2D.Impulse);
                 isJumping = true;
+                canJump = false;
             }
         }
     }
@@ -59,6 +65,16 @@ public class PlayerInput : MonoBehaviour {
         isJumping = false;
     }
 
+    private void JumpDebounceTick() {
+        if (!canJump) {
+            if (jumpDebounceCounter < jumpDebounceLimit) {
+                jumpDebounceCounter += Time.deltaTime;
+                return;
+            }
+            jumpDebounceCounter = 0;
+            canJump = true;
+        }
+    }
     private void HandleAnimator() {
         
 
