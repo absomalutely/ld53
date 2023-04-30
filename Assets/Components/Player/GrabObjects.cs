@@ -44,6 +44,7 @@ public class GrabObjects : MonoBehaviour
                     //grabbedObject.GetComponent<Rigidbody2D>().simulated = false;
                     grabbedObject.transform.position = grabPoint.position;
                     grabbedObject.transform.SetParent(transform);
+                    player.IsCarrying = true;
                 } else if(grabbedObject != null){
                     Debug.Log("Drop");
                     grabbedObject.GetComponent<Rigidbody2D>().isKinematic = false;
@@ -51,6 +52,7 @@ public class GrabObjects : MonoBehaviour
                     //grabbedObject.GetComponent<Rigidbody2D>().simulated = true;
                     grabbedObject.transform.SetParent(null);
                     grabbedObject = null;
+                    player.IsCarrying = false;
                 }
             }
         

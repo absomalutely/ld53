@@ -8,7 +8,8 @@ public class PlayerInput : MonoBehaviour {
     public Rigidbody2D playerRB;
     public SpriteRenderer spriteRenderer;
     public bool FaceLeft { get; private set; } = true;
-    
+    public bool IsCarrying { get; set; } = false;
+
 
     public float movementSpeed = 1000f;
 
@@ -65,6 +66,7 @@ public class PlayerInput : MonoBehaviour {
         animator.SetFloat("moveX", moveX);
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isJumping", isJumping);
+        animator.SetBool("isCarrying", IsCarrying);
         spriteRenderer.flipX = !FaceLeft;
 
     }
