@@ -17,10 +17,14 @@ public class GrabObjects : MonoBehaviour
     [SerializeField]
     private PlayerInput player;
 
+    [SerializeField]
+    public float throwImpulse = 650;
+
     private GameObject grabbedObject;
     
 
     private int layerIndex;
+    private int directionModifier = 1;
 
     
     void Start()
@@ -33,8 +37,14 @@ public class GrabObjects : MonoBehaviour
         var hitRaycast = GetRayCastLine();
         RaycastHit2D hitInfo = Physics2D.Raycast(hitRaycast.Item1, hitRaycast.Item2, hitRaycast.Item3);
 
-        
-            if(Input.GetKeyUp(KeyCode.Space)) {
+        if (player.FaceLeft) {
+            directionModifier = -1;
+        } else {
+            directionModifier = 1;
+        }
+
+
+            if (Input.GetKeyUp(KeyCode.Space)) {
                 Debug.Log("Space Pressed");
                 if(hitInfo.collider != null && hitInfo.collider.gameObject.layer == layerIndex && grabbedObject == null) {
                     Debug.Log("Pickup");
@@ -49,7 +59,7 @@ public class GrabObjects : MonoBehaviour
                     Debug.Log("Drop");
                     grabbedObject.GetComponent<Rigidbody2D>().isKinematic = false;
                     grabbedObject.GetComponent<BoxCollider2D>().enabled = true;
-                    //grabbedObject.GetComponent<Rigidbody2D>().simulated = true;
+                    grabbedObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(player.GetComponent<Rigidbody2D>().velocity.x + (throwImpulse * directionModifier), player.GetComponent<Rigidbody2D>().velocity.y + throwImpulse));
                     grabbedObject.transform.SetParent(null);
                     grabbedObject = null;
                     player.IsCarrying = false;
