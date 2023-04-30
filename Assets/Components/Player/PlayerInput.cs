@@ -7,14 +7,18 @@ public class PlayerInput : MonoBehaviour {
     public GameObject player;
     public Rigidbody2D playerRB;
     public SpriteRenderer spriteRenderer;
-    bool faceLeft = true;
+    public bool FaceLeft { get; private set; } = true;
+    
+
     public float movementSpeed = 1000f;
 
     public float jumpHeight = 400f;
 
+
     //bool allowJump = true;
     bool isJumping = false;
     bool isMoving = true;
+    float moveX;
 
     float moveHorizontal = 0f;
     float moveVertical = 0f;
@@ -22,7 +26,7 @@ public class PlayerInput : MonoBehaviour {
     void Start() {
         playerRB = player.GetComponent<Rigidbody2D>();
         spriteRenderer = player.GetComponent<SpriteRenderer>();
-        Debug.Log("Started");
+        //Debug.Log("Started");
     }
 
     void Update() {
@@ -32,8 +36,9 @@ public class PlayerInput : MonoBehaviour {
         moveVertical = Input.GetAxisRaw("Vertical");
 
         isMoving = Mathf.Abs(moveHorizontal) > 0.1f;
+        moveX = Input.GetAxis("Horizontal");
         if (isMoving) {
-            faceLeft = moveHorizontal < 0f;
+            FaceLeft = moveX <= 0;
         }
     }
 
@@ -54,13 +59,13 @@ public class PlayerInput : MonoBehaviour {
     }
 
     private void HandleAnimator() {
-        float moveX = Input.GetAxis("Horizontal");
+        
 
-        animator.SetBool("faceLeft", moveX <= 0);
+        animator.SetBool("faceLeft", FaceLeft);
         animator.SetFloat("moveX", moveX);
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("isJumping", isJumping);
-        spriteRenderer.flipX = !faceLeft;
+        spriteRenderer.flipX = !FaceLeft;
 
     }
 }
